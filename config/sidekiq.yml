@@ -1,0 +1,13 @@
+:scheduler:
+  :schedule:
+    daily_puzzle_job:
+      cron: "0 9 * * *"   # This runs the job at 9:00 AM every day
+      class: "DailyPuzzleJob"
+
+    weekly_puzzle_job:
+      cron: "0 0 * * 0"   # This runs the every Sunday at midnight
+      class: "WeeklyLeaderboardJob"
+
+    puzzle_inventory_check:
+      cron: "0 10 * * *"  # This runs the job at 10:00 AM every day
+      class: "PuzzleInventoryCheckJob"

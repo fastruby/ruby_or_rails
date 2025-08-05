@@ -1,0 +1,5 @@
+class AddUserToPuzzles < ActiveRecord::Migration[8.0]
+  def change
+    add_column :puzzles, :suggested_by, :string
+  end
+end
