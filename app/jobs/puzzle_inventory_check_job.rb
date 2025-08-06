@@ -3,10 +3,10 @@ class PuzzleInventoryCheckJob < ApplicationJob
   retry_on StandardError, attempts: 3
 
   def perform
-    approved_puzzle_count = Puzzle.where(state: 0).count
+    approved_unsent_puzzle_count = Puzzle.where(state: 0, sent_at: nil).count
 
-    if approved_puzzle_count < 5
-      send_low_inventory_notification(approved_puzzle_count)
+    if approved_unsent_puzzle_count < 5
+      send_low_inventory_notification(approved_unsent_puzzle_count)
     end
   end
 
