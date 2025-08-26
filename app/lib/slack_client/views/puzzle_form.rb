@@ -27,7 +27,7 @@ module SlackClient
           end
         end
 
-        Slack::BlockKit.modal blocks: blocks, external_id: "puzzle_form", title: "Suggest a Puzzle" do |modal|
+        Slack::BlockKit.modal blocks: blocks, external_id: "puzzle_form__#{SecureRandom.hex(6)}", title: "Suggest a Puzzle" do |modal|
           modal.submit text: "Submit"
           modal.close text: "Close"
         end.as_json
