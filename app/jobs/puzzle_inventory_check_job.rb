@@ -16,4 +16,10 @@ class PuzzleInventoryCheckJob < ApplicationJob
     notification_message = SlackClient::Messages::LowPuzzleInventoryNotification.new(count).create
     send_message(notification_message, channel_id: ENV.fetch("SHIELD_NOTIFICATIONS_CHANNEL", nil))
   end
+
+  def send_message(message, channel_id:)
+    SlackClient::Client.instance.chat_postMessage(channel: channel_id, blocks: message)
+  rescue Slack::Web::Api::Errors::SlackError
+    head :unprocessable_entity
+  end
 end
