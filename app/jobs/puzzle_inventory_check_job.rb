@@ -19,7 +19,7 @@ class PuzzleInventoryCheckJob < ApplicationJob
 
   def send_message(message, channel_id:)
     SlackClient::Client.instance.chat_postMessage(channel: channel_id, blocks: message)
-  rescue Slack::Web::Api::Errors::SlackError
-    head :unprocessable_entity
+  rescue Slack::Web::Api::Errors::SlackError => e
+    Rails.logger.error "Failed to send Slack message: #{e.message} #{e.response_metadata}"
   end
 end
