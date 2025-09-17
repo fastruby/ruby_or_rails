@@ -40,23 +40,29 @@ module Discord
           return
         end
 
-        server = Server.find_or_initialize_by(server_id: event.server.id)
-
         # Create the answer record
-        answer = Answer.create!(
+        answer = Answer.create(
           puzzle_id: puzzle.id,
           user_id: user.id,
           server_id: server.id,
           choice: answer, # 'ruby' or 'rails'
           is_correct: puzzle.answer.to_s == answer # Correct answer check
         )
-
-        # Respond to the user with the result
-        event.respond(
-          content: nil,
-          embeds: [ answer_embed(answer, puzzle) ],
-          ephemeral: true # Only the user sees this message
-        )
+        if answer
+          # Respond to the user with the result
+          event.respond(
+            content: nil,
+            embeds: [ answer_embed(answer, puzzle) ],
+            ephemeral: true # Only the user sees this message
+          )
+        else
+          # If the user has already answered, prevent them from changing their answer
+          event.respond(
+            content: "You have already answered this puzzle. You cannot change your answer.",
+            ephemeral: true # Only the user sees this message
+          )
+          return
+        end
       end
 
       private
