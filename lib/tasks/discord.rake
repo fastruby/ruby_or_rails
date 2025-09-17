@@ -26,6 +26,7 @@ def bot
   @bot ||= begin
     bot_wrapper = Discord::Bot.configure do |config|
       config.token = ENV.fetch("DISCORD_BOT_TOKEN")
+      config.log_mode = ENV.fetch("DISCORD_LOG_MODE", "normal").to_sym
     end
     bot_wrapper.bot
   end

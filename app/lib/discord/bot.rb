@@ -18,10 +18,9 @@ module Discord
     delegate :send_message, to: :bot
 
     def initialize(configuration)
-      @bot = Discordrb::Bot.new(token: configuration.token)
+      @bot = Discordrb::Bot.new(token: configuration.token, log_mode: configuration.log_mode)
       @bot.ready do
         Rails.logger.info "✅ Bot is online and connected to Discord!"
-        puts "✅ Bot is online and connected to Discord!"
         setup
       end
     end
