@@ -61,7 +61,7 @@ module Discord
             content: "You have already answered this puzzle. You cannot change your answer.",
             ephemeral: true # Only the user sees this message
           )
-          return
+          nil
         end
       end
 

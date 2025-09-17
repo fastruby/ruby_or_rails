@@ -71,10 +71,9 @@ users.each do |user_data|
         user_id: user.id,
         puzzle_id: Puzzle.all.sample.id,
         server_id: server.id,
-        choice: ["ruby", "rails"].sample,
-        is_correct: [true, false].sample
+        choice: [ "ruby", "rails" ].sample,
+        is_correct: [ true, false ].sample
       )
     end
   end
 end
-
