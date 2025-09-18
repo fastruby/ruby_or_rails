@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_02_180541) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_17_170711) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,8 +21,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_02_180541) do
     t.boolean "is_correct"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "link"
     t.bigint "server_id", null: false
+    t.index ["puzzle_id", "user_id", "server_id"], name: "index_answers_on_puzzle_user_server", unique: true
     t.index ["puzzle_id"], name: "index_answers_on_puzzle_id"
     t.index ["server_id"], name: "index_answers_on_server_id"
     t.index ["user_id"], name: "index_answers_on_user_id"
