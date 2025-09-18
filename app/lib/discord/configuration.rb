@@ -5,6 +5,7 @@ module Discord
 
     def initialize
       @token = nil
+      @log_mode = :normal
     end
   end
 end
