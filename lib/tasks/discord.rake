@@ -4,6 +4,11 @@ namespace :discord do
     bot.run
   end
 
+  desc "Sends a daily puzzle. Useful for days when the approved puzzles where at 0 when the cron job ran."
+  task new_puzzle: :environment do
+    DailyPuzzleJob.perform_now
+  end
+
   desc "Clear all globally registered bot commands and re-register them"
   task reset_commands: :environment do
     # Fetch and delete all existing commands
