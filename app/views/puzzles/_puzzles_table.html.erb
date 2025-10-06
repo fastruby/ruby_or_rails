@@ -24,7 +24,7 @@
           <% end %>
         </td>
         <% if actions == :archived %>
-          <td><%= time_ago_in_words(puzzle.sent_at) %> ago</td>
+          <td><%= time_ago(puzzle.sent_at) %></td>
         <% end %>
         <td>
           <% if actions == :pending %>
