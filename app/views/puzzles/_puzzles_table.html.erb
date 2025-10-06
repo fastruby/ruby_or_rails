@@ -5,6 +5,9 @@
       <th>Answer</th>
       <th>Explanation</th>
       <th>Link</th>
+      <% if actions == :archived %>
+        <th>Sent</th>
+      <% end %>
       <th>Actions</th>
     </tr>
   </thead>
@@ -20,6 +23,9 @@
             &nbsp;
           <% end %>
         </td>
+        <% if actions == :archived %>
+          <td><%= time_ago(puzzle.sent_at) %></td>
+        <% end %>
         <td>
           <% if actions == :pending %>
             <%= button_to 'Approve', puzzle_state_path(puzzle, state: :approved), method: :patch, form_class: 'inline-form', class: 'btn approve-btn' %>
