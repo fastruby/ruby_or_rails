@@ -14,7 +14,7 @@
   <tbody>
     <% puzzles.each do |puzzle| %>
       <tr id="<%= dom_id(puzzle) %>">
-        <td><%= puzzle.question %></td>
+        <td><%= simple_format(puzzle.question) %></td>
         <td><%= puzzle.answer %></td>
         <td><%= puzzle.explanation %></td>
         <td>
