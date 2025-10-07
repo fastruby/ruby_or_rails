@@ -67,13 +67,15 @@ users.each do |user_data|
   # Seed random answers for this user if they have none
   if user.answers.where(server_id: server.id).empty?
     3.times do
-      Answer.create!(
+      puzzle = Puzzle.all.sample
+      Answer.find_or_create_by!(
         user_id: user.id,
-        puzzle_id: Puzzle.all.sample.id,
-        server_id: server.id,
-        choice: [ "ruby", "rails" ].sample,
-        is_correct: [ true, false ].sample
-      )
+        puzzle_id: puzzle.id,
+        server_id: server.id
+      ) do |answer|
+        answer.choice = [ "ruby", "rails" ].sample
+        answer.is_correct = [ true, false ].sample
+      end
     end
   end
 end
