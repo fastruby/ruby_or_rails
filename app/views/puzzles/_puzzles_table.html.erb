@@ -13,7 +13,7 @@
   </thead>
   <tbody>
     <% puzzles.each do |puzzle| %>
-      <tr>
+      <tr id="<%= dom_id(puzzle) %>">
         <td><%= puzzle.question %></td>
         <td><%= puzzle.answer %></td>
         <td><%= puzzle.explanation %></td>
@@ -30,6 +30,10 @@
           <% if actions == :pending %>
             <%= button_to 'Approve', puzzle_state_path(puzzle, state: :approved), method: :patch, form_class: 'inline-form', class: 'btn approve-btn' %>
             <%= button_to 'Reject', puzzle_state_path(puzzle, state: :rejected), method: :patch, form_class: 'inline-form', class: 'btn reject-btn' %>
+            <%= link_to "Edit",
+              edit_puzzle_path(puzzle),
+              data: { turbo_frame: "modal" },
+              class: "btn edit-btn" %>
           <% elsif actions == :approved %>
             <%= button_to 'Reject', puzzle_state_path(puzzle, state: :rejected), method: :patch, form_class: 'inline-form', class: 'btn reject-btn' %>
             <%= button_to 'Pending', puzzle_state_path(puzzle, state: :pending), method: :patch, form_class: 'inline-form', class: 'btn pending-btn' %>

@@ -1,0 +1,25 @@
+<turbo-stream action="replace" target="<%= dom_id(@puzzle) %>">
+  <template>
+    <tr id="<%= dom_id(@puzzle) %>">
+      <td><%= @puzzle.question %></td>
+      <td><%= @puzzle.answer %></td>
+      <td><%= @puzzle.explanation %></td>
+      <td>
+        <% if @puzzle.link.present? %>
+          <%= link_to 'View', @puzzle.link, target: '_blank' %>
+        <% end %>
+      </td>
+      <td>
+          <%= button_to 'Approve', puzzle_state_path(@puzzle, state: :approved), method: :patch, form_class: 'inline-form', class: 'btn approve-btn' %>
+          <%= button_to 'Reject', puzzle_state_path(@puzzle, state: :rejected), method: :patch, form_class: 'inline-form', class: 'btn reject-btn' %>
+          <%= link_to "Edit",
+              edit_puzzle_path(@puzzle),
+              data: { turbo_frame: "modal" },
+              class: "btn edit-btn" %>
+      </td>
+    </tr>
+  </template>
+</turbo-stream>
+<turbo-stream action="update" target="modal">
+  <template></template>
+</turbo-stream>

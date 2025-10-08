@@ -1,0 +1,14 @@
+<turbo-frame id="modal">
+  <div data-controller="modal" data-action="click->modal#close"class="modal-overlay">
+    <div data-modal-target="content"
+        class="modal-content"
+        onclick="event.stopPropagation()">
+      <h2 class="text-xl mb-4">Edit Puzzle</h2>
+
+      <%= render "form", puzzle: @puzzle %>
+
+      <button data-action="modal#close"
+              class="btn close-btn">Close</button>
+    </div>
+  </div>
+</turbo-frame>

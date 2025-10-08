@@ -1,0 +1,30 @@
+<%=form_with model: @puzzle do |f| %>
+  <div class="modal-area">
+    <%= f.label :question %>
+    <%= f.text_area :question %>
+  </div>
+
+<div class="modal-area">
+  <%= f.label :answer %><br>
+  <div class="answer-radio-group">
+    <label>
+      <%= f.radio_button :answer, "ruby" %> Ruby
+    </label>
+    <label>
+      <%= f.radio_button :answer, "rails" %> Rails
+    </label>
+  </div>
+</div>
+
+  <div class="modal-area">
+    <%= f.label :explanation %>
+    <%= f.text_area :explanation %>
+  </div>
+
+  <div class="modal-area">
+    <%= f.label :link %>
+    <%= f.text_field :link %>
+  </div>
+
+  <%= f.submit "Save", class: "btn approve-btn" %>
+<% end %>

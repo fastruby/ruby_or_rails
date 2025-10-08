@@ -72,11 +72,11 @@ th {
   background-color: #4CAF50;
 }
 
-.reject-btn {
+.reject-btn, .close-btn {
   background-color: #f44336;
 }
 
-.pending-btn {
+.pending-btn, .edit-btn {
   background-color: yellow;
   color: black;
 }
@@ -110,3 +110,47 @@ th {
   background-color: #fff3cd;
   color: #856404;
 }
+
+/* full screen overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* modal content box */
+.modal-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  min-width: 300px;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.modal-area {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+/* Horizontal radio buttons for puzzle answer */
+.answer-radio-group {
+  display: flex;
+  gap: 1.5em;
+  align-items: center;
+}
+.answer-radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+
