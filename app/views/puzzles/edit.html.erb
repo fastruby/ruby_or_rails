@@ -1,6 +1,5 @@
-
 <turbo-frame id="modal">
-  <div data-controller="modal" data-action="modal#close"class="modal-overlay">
+  <div data-controller="modal" data-action="click->modal#close"class="modal-overlay">
     <div data-modal-target="content"
         class="modal-content"
         onclick="event.stopPropagation()">
