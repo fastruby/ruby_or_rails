@@ -16,15 +16,14 @@ class PuzzlesController < ApplicationController
 
   def update
     @puzzle = Puzzle.find(params[:id])
-    if @puzzle.update(puzzle_params)
-      respond_to do |format|
+
+    respond_to do |format|
+      if @puzzle.update(puzzle_params)
         format.turbo_stream
         format.html { redirect_to puzzles_path, notice: "Puzzle updated." }
         format.json { render json: { success: true, puzzle: @puzzle } }
-      end
-    else
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@puzzle, partial: "puzzles/form", locals: { puzzle: @puzzle }) }
+      else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("modal", partial: "puzzles/edit_modal", locals: { puzzle: @puzzle }), status: :unprocessable_entity }
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: { success: false, errors: @puzzle.errors.full_messages }, status: :unprocessable_entity }
       end
