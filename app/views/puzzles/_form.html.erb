@@ -1,7 +1,7 @@
 <%= form_with model: puzzle do |f| %>
   <div class="modal-area">
     <%= f.label :question %>
-    <%= f.text_area :question, class: puzzle.errors[:question].any? ? "error" : "" %>
+    <%= f.text_area :question, class: puzzle.errors[:question].any? ? "error" : "", rows: 10, cols: 40 %>
     <% if puzzle.errors[:question].any? %>
       <div class="field-error"><%= puzzle.errors[:question].first %></div>
     <% end %>
@@ -21,7 +21,7 @@
 
   <div class="modal-area">
     <%= f.label :explanation %>
-    <%= f.text_area :explanation %>
+    <%= f.text_area :explanation, rows: 10, cols: 40 %>
   </div>
 
   <div class="modal-area">
