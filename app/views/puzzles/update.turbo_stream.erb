@@ -1,7 +1,7 @@
 <turbo-stream action="replace" target="<%= dom_id(@puzzle) %>">
   <template>
     <tr id="<%= dom_id(@puzzle) %>">
-      <td><%= @puzzle.question %></td>
+      <td><%= simple_format(@puzzle.question) %></td>
       <td><%= @puzzle.answer %></td>
       <td><%= @puzzle.explanation %></td>
       <td>
