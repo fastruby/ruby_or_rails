@@ -8,7 +8,16 @@ module SlackClient
           end
 
           blocks.input label: "What is the Puzzle question?", block_id: "question" do |input|
-            input.plain_text_input action_id: "question", multiline: true
+              input.plain_text_input(
+              action_id: "question",
+              multiline: true,
+              placeholder: "See template below"
+            )
+          end
+
+          blocks.context do |context|
+            context.mrkdwn text: "*Puzzle Examples*"
+            context.plain_text text: placeholder_text
           end
 
           blocks.input label: "Answer", block_id: "answer" do |input|
@@ -40,6 +49,25 @@ module SlackClient
           Please provide a puzzle question, the answer, an explanation of the answer, and a link to documentation if applicable.
 
           When providing the question, please provide ONLY the question text, without any additional introduction (for example, do not include "Is this ruby or rails?"). The bot will add that automatically.
+        TEXT
+      end
+
+      def placeholder_text
+        <<~TEXT
+
+          Example: Multi-line Snippet
+
+          In this snippet:
+
+          ```
+          Time.current.strftime("%Y-%m-%dT%H:%M:%S%z")
+          ```
+
+          Is the `current` method a Ruby or Rails method?
+
+          Example: Single Sentence Snippet
+
+          When you have a line like this `hash = { a: 1, b: 2, c: 3 }` and later you call this method `hash.transform_keys(&:to_s)` -- is `transform_keys` a Ruby or Rails method?
         TEXT
       end
     end
