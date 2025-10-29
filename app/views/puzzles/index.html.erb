@@ -2,15 +2,18 @@
   <%= button_to 'Logout', session_path(1), method: :delete, class: "btn" %>
 </div>
 
-<h1>Pending Puzzles</h1>
+<h1>Pending Puzzles - Total: <%= @pending_puzzles.length %></h1>
 <%= render partial: 'puzzles_table', locals: { puzzles: @pending_puzzles, actions: :pending } %>
 
-<h1>Approved Puzzles</h1>
+<h1>
+  Approved Puzzles - Total: <%= @approved_puzzles.length %>
+  <% if @approved_puzzles.length < 5 %><span title="Less than 5 approved puzzles!">⚠️</span><% end %>
+</h1>
 <%= render partial: 'puzzles_table', locals: { puzzles: @approved_puzzles, actions: :approved } %>
 
 <h1>Rejected Puzzles</h1>
 <%= render partial: 'puzzles_table', locals: { puzzles: @rejected_puzzles, actions: :rejected } %>
 
-<h1>Archive Puzzles</h1>
+<h1>Archive Puzzles - Total: <%= @archived_puzzles.length %></h1>
 <p>These puzzles have already been sent to the users.</p>
 <%= render partial: 'puzzles_table', locals: { puzzles: @archived_puzzles, actions: :archived } %>
