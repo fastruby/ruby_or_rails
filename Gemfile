@@ -8,6 +8,7 @@ gem "discordrb"
 gem "dotenv-rails"
 
 gem "propshaft"
+gem "dartsass-rails"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.5.9"
 # Use the Puma web server [https://github.com/puma/puma]
@@ -46,6 +47,8 @@ gem "thruster", require: false
 
 gem "slack-ruby-block-kit", ">= 0.24.0"
 gem "slack-ruby-client", ">= 2.4.0"
+
+gem "fastruby-styleguide", github: "fastruby/styleguide", branch: "gh-pages"
 
 # auth gems
 gem "omniauth"
