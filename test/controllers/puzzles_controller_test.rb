@@ -2,6 +2,7 @@ require "test_helper"
 
 class PuzzlesControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
+    sign_in
     get puzzles_path
     assert_response :success
   end
@@ -9,6 +10,7 @@ class PuzzlesControllerTest < ActionDispatch::IntegrationTest
   test "should show error message when editing puzzle with invalid data" do
     puzzle = puzzles(:one)
 
+    sign_in
     patch puzzle_path(puzzle), params: {
       puzzle: {
         question: "",
@@ -27,6 +29,7 @@ class PuzzlesControllerTest < ActionDispatch::IntegrationTest
   test "should successfully update puzzle with valid data" do
     puzzle = puzzles(:one)
 
+    sign_in
     patch puzzle_path(puzzle), params: {
       puzzle: {
         question: "Updated question",
