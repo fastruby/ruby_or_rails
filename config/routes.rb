@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :puzzles, only: [ :index, :edit, :update ] do
     resource :state, only: [ :update ], module: :puzzles
+    resource :clone, only: [ :create ], module: :puzzles
   end
   resources :sessions, only: [ :create, :destroy ]
 
