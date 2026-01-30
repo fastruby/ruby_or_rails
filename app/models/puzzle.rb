@@ -3,6 +3,8 @@ class Puzzle < ApplicationRecord
   enum :state, { approved: 0, rejected: 1, pending: 2, archived: 3 }
   has_many :answers
 
+  belongs_to :original_puzzle, class_name: "Puzzle", optional: true
+
   validates :question, presence: true
 
   scope :archived, -> { where(state: :archived).order(sent_at: :desc) }

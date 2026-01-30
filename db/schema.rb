@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_17_170711) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_30_200200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_17_170711) do
     t.string "link"
     t.integer "state", default: 2, null: false
     t.string "suggested_by"
+    t.bigint "original_puzzle_id"
+    t.index ["original_puzzle_id"], name: "index_puzzles_on_original_puzzle_id"
   end
 
   create_table "servers", force: :cascade do |t|
@@ -81,6 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_17_170711) do
   add_foreign_key "answers", "servers"
   add_foreign_key "answers", "users"
   add_foreign_key "channels", "servers"
+  add_foreign_key "puzzles", "puzzles", column: "original_puzzle_id"
   add_foreign_key "users_servers", "servers"
   add_foreign_key "users_servers", "users"
 end

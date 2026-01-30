@@ -12,6 +12,7 @@ class Puzzles::ClonesControllerTest < ActionDispatch::IntegrationTest
     cloned = Puzzle.order(:id).last
     assert_redirected_to puzzles_path
 
+    assert_equal original.id, cloned.original_puzzle_id
     assert_equal original.question, cloned.question
     assert_equal original.answer, cloned.answer
     assert_equal original.explanation, cloned.explanation
