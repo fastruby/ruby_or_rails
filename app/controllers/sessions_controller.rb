@@ -1,9 +1,11 @@
 class SessionsController < ApplicationController
+  skip_before_action :check_user_token
+
   def create
     auth = request.env["omniauth.auth"]
     user_email = auth.info.email
 
-    domain_allowlist = ENV.fetch("DOMAIN_ALLOWLIST").split(",").map(&:strip)
+    domain_allowlist = ENV.fetch("DOMAIN_ALLOWLIST", "").split(",").map(&:strip)
     if domain_allowlist.present?
       unless domain_allowlist.any? { |domain| user_email.end_with?("@#{domain}") }
         reset_session

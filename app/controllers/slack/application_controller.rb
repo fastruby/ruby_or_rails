@@ -1,5 +1,7 @@
 class Slack::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
+  skip_before_action :check_user_token
+
   before_action :valid_slack_request?
 
   private

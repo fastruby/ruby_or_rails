@@ -42,6 +42,7 @@
             <%= button_to 'Pending', puzzle_state_path(puzzle, state: :pending), method: :patch, form_class: 'inline-form', class: 'btn pending-btn' %>
           <% elsif actions == :archived %>
             <%= button_to 'Un-Archive', puzzle_state_path(puzzle, state: :pending), method: :patch, form_class: 'inline-form', class: 'btn pending-btn' %>
+            <%= button_to 'Clone', puzzle_clone_path(puzzle, state: :pending), method: :post, form_class: 'inline-form', class: 'btn pending-btn' %>
           <% end %>
         </td>
       </tr>

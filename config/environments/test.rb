@@ -50,4 +50,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Once you have enabled test mode, all requests to OmniAuth will be short circuited to use
+  # the mock authentication hash.
+  # See: https://github.com/omniauth/omniauth/wiki/Integration-Testing
+  OmniAuth.config.test_mode = true
 end
