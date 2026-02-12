@@ -5,6 +5,10 @@
       <th>Answer</th>
       <th>Explanation</th>
       <th>Link</th>
+      <% if actions == :approved %>
+        <th>Correct %</th>
+        <th>Sent</th>
+      <% end %>
       <% if actions == :archived %>
         <th>Sent</th>
       <% end %>
@@ -23,6 +27,10 @@
             &nbsp;
           <% end %>
         </td>
+        <% if actions == :approved %>
+          <td><%= puzzle.correct_answer_percentage %>%</td>
+          <td><%= time_ago(puzzle.sent_at) if puzzle.sent_at.present? %></td>
+        <% end %>
         <% if actions == :archived %>
           <td><%= time_ago(puzzle.sent_at) %></td>
         <% end %>
