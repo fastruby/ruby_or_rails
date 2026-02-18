@@ -8,4 +8,11 @@ class Puzzle < ApplicationRecord
   validates :question, presence: true
 
   scope :archived, -> { where(state: :archived).order(sent_at: :desc) }
+
+  def correct_answer_percentage
+    total = answers.count
+    return 0 if total.zero?
+
+    (answers.where(is_correct: true).count * 100.0 / total).round(1)
+  end
 end
