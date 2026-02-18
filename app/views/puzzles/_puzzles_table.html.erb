@@ -5,7 +5,7 @@
       <th>Answer</th>
       <th>Explanation</th>
       <th>Link</th>
-      <% if actions.in?([:approved, :archived]) %>
+      <% if actions == :archived %>
         <th>Correct %</th>
         <th>Sent</th>
       <% end %>
@@ -24,9 +24,9 @@
             &nbsp;
           <% end %>
         </td>
-        <% if actions.in?([:approved, :archived]) %>
+        <% if actions == :archived %>
           <td><%= puzzle.correct_answer_percentage %>%</td>
-          <td><%= time_ago(puzzle.sent_at) if puzzle.sent_at.present? %></td>
+          <td><%= time_ago(puzzle.sent_at) %></td>
         <% end %>
         <td>
           <% if actions == :pending %>
