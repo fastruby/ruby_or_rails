@@ -7,17 +7,15 @@ class ApplicationController < ActionController::Base
   private
 
   def check_user_token
-    unless session[:user_token]
-      render "puzzles/login"
-    end
+    render "puzzles/login" and return unless session[:user_token]
   end
 
   def check_session_expiry
     if session[:expires_at].present? && Time.current > session[:expires_at]
       reset_session
-      render "puzzles/login"
-    else
-      session[:expires_at] = 1.hour.from_now
+      render "puzzles/login" and return
     end
+
+    session[:expires_at] = 1.hour.from_now
   end
 end

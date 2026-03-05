@@ -7,6 +7,12 @@ class PuzzlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "unauthenticated request renders login page" do
+    get puzzles_path
+    assert_response :success
+    assert_match "login", response.body.downcase
+  end
+
   test "should show error message when editing puzzle with invalid data" do
     puzzle = puzzles(:one)
 
