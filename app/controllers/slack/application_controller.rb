@@ -7,7 +7,7 @@ class Slack::ApplicationController < ApplicationController
   private
 
   def valid_slack_request?
-    @verified ||= verify_slack_signature
+    head :unauthorized and return unless verify_slack_signature
   end
 
   def verify_slack_signature
