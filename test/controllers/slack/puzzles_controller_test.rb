@@ -5,9 +5,7 @@ class Slack::PuzzlesControllerTest < ActionDispatch::IntegrationTest
     ENV["SLACK_SIGNING_SECRET"] = "test_signing_secret"
   end
 
-  test "renders ok when puzzle is saved and notification succeeds" do
-    # Use a payload that fails validation so send_message is never called,
-    # verifying the action renders 200 without a double render.
+  test "renders ok when puzzle fails validation" do
     params = { payload: puzzle_payload(question: "") }
 
     post slack_puzzle_path, params: params,
@@ -16,19 +14,17 @@ class Slack::PuzzlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-  test "does not double render when Slack notification fails after puzzle is saved" do
-    # Override send_message to simulate a Slack API error that calls head :unprocessable_entity.
-    # Without the fix, this causes AbstractController::DoubleRenderError because create
-    # still calls render json: after send_message returns.
+  test "renders ok even when Slack notification fails after puzzle is saved" do
+    # Notification failure should only log — it must not affect the response to Slack.
     original = Slack::ApplicationController.instance_method(:send_message)
-    Slack::ApplicationController.define_method(:send_message) { |*| head :unprocessable_entity }
+    Slack::ApplicationController.define_method(:send_message) { |*| nil }
 
     params = { payload: puzzle_payload(question: "What is unique about Ruby's blocks?") }
 
     post slack_puzzle_path, params: params,
       headers: slack_headers(body: params.to_query)
 
-    assert_response :unprocessable_entity
+    assert_response :ok
   ensure
     Slack::ApplicationController.define_method(:send_message, original)
   end
