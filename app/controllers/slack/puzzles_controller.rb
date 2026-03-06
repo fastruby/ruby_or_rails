@@ -13,6 +13,7 @@ class Slack::PuzzlesController < Slack::ApplicationController
       view = SlackClient::Views::Success.new.create
       notification_message = SlackClient::Messages::NewPuzzleNotification.new(puzzle).create
       send_message(notification_message, channel_id: ENV.fetch("SLACK_NOTIFICATIONS_CHANNEL", nil))
+      return if performed?
     else
       view = SlackClient::Views::Failure.new.create
     end
