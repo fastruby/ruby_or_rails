@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :check_user_token
+  skip_before_action :check_session_expiry
 
   def create
     auth = request.env["omniauth.auth"]
