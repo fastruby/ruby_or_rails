@@ -7,6 +7,22 @@ class PuzzlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "unauthenticated request renders login" do
+    get puzzles_path
+    assert_response :success
+    assert_dom "p", "Log in to access the Ruby or Rails admin panel."
+  end
+
+  test "expired session renders login and requires re-authentication" do
+    sign_in
+    get puzzles_path # authenticate! sets session[:expires_at]
+    travel_to 2.hours.from_now do
+      get puzzles_path
+      assert_response :success
+      assert_dom "p", "Log in to access the Ruby or Rails admin panel."
+    end
+  end
+
   test "should show error message when editing puzzle with invalid data" do
     puzzle = puzzles(:one)
 

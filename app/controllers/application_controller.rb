@@ -1,23 +1,16 @@
 class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
-  before_action :check_session_expiry
-  before_action :check_user_token
+  before_action :authenticate!
 
   private
 
-  def check_user_token
-    unless session[:user_token]
-      render "puzzles/login"
-    end
-  end
-
-  def check_session_expiry
+  def authenticate!
     if session[:expires_at].present? && Time.current > session[:expires_at]
       reset_session
-      render "puzzles/login"
-    else
-      session[:expires_at] = 1.hour.from_now
+      render "puzzles/login" and return
     end
+    session[:expires_at] = 1.hour.from_now
+    render "puzzles/login" unless session[:user_token]
   end
 end
