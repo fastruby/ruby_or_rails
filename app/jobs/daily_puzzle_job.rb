@@ -3,7 +3,7 @@ class DailyPuzzleJob < ApplicationJob
   retry_on StandardError, attempts: 3
 
   def perform
-    puzzle = Puzzle.where(sent_at: nil, state: 0).order("RANDOM()").first
+    puzzle = Puzzle.approved.where(sent_at: nil).order("RANDOM()").first
     return unless puzzle
 
     Server.where(active: true).each do |server|
