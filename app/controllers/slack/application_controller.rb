@@ -1,13 +1,13 @@
 class Slack::ApplicationController < ApplicationController
   skip_before_action :verify_authenticity_token
-  skip_before_action :check_user_token
+  skip_before_action :authenticate!
 
-  before_action :valid_slack_request?
+  before_action :verify_slack_request!
 
   private
 
-  def valid_slack_request?
-    @verified ||= verify_slack_signature
+  def verify_slack_request!
+    head :unauthorized unless verify_slack_signature
   end
 
   def verify_slack_signature
@@ -43,7 +43,8 @@ class Slack::ApplicationController < ApplicationController
 
   def send_message(message, channel_id:)
     SlackClient::Client.instance.chat_postMessage(channel: channel_id, blocks: message)
-  rescue Slack::Web::Api::Errors::SlackError
-    head :unprocessable_entity
+  rescue Slack::Web::Api::Errors::SlackError => e
+    Rails.logger.error "Failed to send Slack message: #{e.message}"
+    Sentry.capture_exception(e)
   end
 end
