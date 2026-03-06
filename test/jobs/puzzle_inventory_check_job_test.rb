@@ -3,6 +3,7 @@ require "test_helper"
 class PuzzleInventoryCheckJobTest < ActiveJob::TestCase
   setup do
     Puzzle.approved.where(sent_at: nil).delete_all
+    ENV["SHIELD_NOTIFICATIONS_CHANNEL"] = "test-channel"
   end
 
   test "sends notification when fewer than 5 approved unsent puzzles exist" do
