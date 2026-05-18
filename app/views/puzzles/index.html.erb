@@ -16,4 +16,9 @@
 
 <h1>Archive Puzzles - Total: <%= @archived_puzzles.length %></h1>
 <p>These puzzles have already been sent to the users.</p>
+<section class="filters">
+  <label>Filters:</label>
+  <br>
+  <%= link_to "Show low success rate only", url_for(low_success_rate: true) %>
+</section>
 <%= render partial: 'puzzles_table', locals: { puzzles: @archived_puzzles, actions: :archived } %>

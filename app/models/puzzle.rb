@@ -10,9 +10,15 @@ class Puzzle < ApplicationRecord
   scope :archived, -> { where(state: :archived).order(sent_at: :desc) }
 
   def correct_answer_percentage
-    total = answers.count
+    total = answers.size
     return 0 if total.zero?
 
-    (answers.where(is_correct: true).count * 100.0 / total).round(1)
+    correct_count = answers.loaded ? answers.select(&:is_correct).count : answers.where(is_correct: true).count
+
+    (correct_count * 100.0 / total).round(1)
+  end
+
+  def self.only_low_success_rate
+    includes(:answers).to_a.select { |ans| ans.correct_answer_percentage <= 80 }
   end
 end

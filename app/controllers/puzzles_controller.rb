@@ -4,6 +4,7 @@ class PuzzlesController < ApplicationController
     @approved_puzzles = Puzzle.approved
     @rejected_puzzles = Puzzle.rejected
     @archived_puzzles = Puzzle.archived
+    @archived_puzzles = @archived_puzzles.only_low_success_rate if params[:low_success_rate]
   end
 
   def edit

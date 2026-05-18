@@ -1,0 +1,47 @@
+answer1:
+  puzzle: archived_low_rate
+  user: user1
+  is_correct: true
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
+
+answer2:
+  puzzle: archived_low_rate
+  user: user2
+  is_correct: true
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
+
+answer3:
+  puzzle: archived_low_rate
+  user: user3
+  is_correct: false
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
+
+answer4:
+  puzzle: archived_low_rate
+  user: user4
+  is_correct: false
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
+
+answer5:
+  puzzle: archived_high_rate
+  user: user1
+  is_correct: true
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
+
+answer6:
+  puzzle: archived_high_rate
+  user: user2
+  is_correct: true
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
+
+answer7:
+  puzzle: archived_high_rate
+  user: user3
+  is_correct: true
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
+
+answer8:
+  puzzle: archived_high_rate
+  user: user4
+  is_correct: true
+  server_id: <%= ActiveRecord::FixtureSet::identify(:server1) %>
