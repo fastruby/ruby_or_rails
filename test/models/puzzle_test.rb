@@ -49,4 +49,14 @@ class PuzzleTest < ActiveSupport::TestCase
   test "has many answers" do
     assert_respond_to Puzzle.new, :answers
   end
+
+  test "only_low_success_rate includes only puzzles with less than or equal 80%" do
+    puzzles = Puzzle.archived
+    assert_includes puzzles, puzzles(:archived_low_rate)
+    assert_includes puzzles, puzzles(:archived_high_rate)
+
+    puzzles = Puzzle.archived.only_low_success_rate
+    assert_includes puzzles, puzzles(:archived_low_rate)
+    assert_not_includes puzzles, puzzles(:archived_high_rate)
+  end
 end
