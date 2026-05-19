@@ -30,6 +30,6 @@ class Puzzle < ApplicationRecord
 
   def self.without_cloned
     cloned_puzzles_ids = unscoped.where.not(original_puzzle_id: nil).pluck(:original_puzzle_id)
-    all.to_a.select { |puzzle| !cloned_puzzles_ids.include?(puzzle.id) }
+    where.not(id: cloned_puzzles_ids)
   end
 end
