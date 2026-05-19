@@ -37,60 +37,62 @@ puzzles.each do |p|
 end
 
 # ====== Create Archived (already sent) Puzzle records ======
+# Each puzzle has a fixed success_rate (% of 10 users who answer correctly).
+# Rates <= 80 appear in the "low success rate" filter; rates > 80 do not.
 archived_puzzles = [
   {
     question: "Ruby or Rails provided this method? before_action :authenticate_user!",
     answer: :rails,
     explanation: "`before_action` is a Rails callback defined in `ActionController::Callbacks`. It runs specified methods before controller actions.",
     sent_at: 7.days.ago,
-    high_success: false
+    success_rate: 20
   },
   {
     question: "Ruby or Rails provided this method? 42.times { puts 'hello' }",
     answer: :ruby,
     explanation: "`Integer#times` is a core Ruby method that iterates a block a specified number of times.",
     sent_at: 6.days.ago,
-    high_success: false
+    success_rate: 40
   },
   {
     question: "Ruby or Rails provided this method? User.where(active: true).order(:name)",
     answer: :rails,
     explanation: "`where` and `order` are ActiveRecord query methods provided by Rails to build SQL queries.",
     sent_at: 5.days.ago,
-    high_success: false
+    success_rate: 50
   },
   {
     question: "Ruby or Rails provided this method? 'hello world'.split(' ')",
     answer: :ruby,
     explanation: "`String#split` is a core Ruby method that divides a string into an array based on a delimiter.",
     sent_at: 4.days.ago,
-    high_success: false
+    success_rate: 70
   },
   {
     question: "Ruby or Rails provided this method? flash[:notice] = 'Saved!'",
     answer: :rails,
     explanation: "`flash` is a Rails feature provided by `ActionDispatch::Flash` for passing messages between requests.",
     sent_at: 3.days.ago,
-    high_success: false
+    success_rate: 80
   },
-  # high success rate puzzles (9/10 correct = 90%) -- should NOT appear in low success rate filter
+  # high success rate puzzles -- should NOT appear in the low success rate filter (rate > 80)
   {
     question: "Ruby or Rails provided this method? [1, 2, 3].reduce(:+)",
     answer: :ruby,
     explanation: "`Enumerable#reduce` (also `inject`) is a core Ruby method that combines elements using a binary operation.",
     sent_at: 2.days.ago,
-    high_success: true
+    success_rate: 90
   },
   {
     question: "Ruby or Rails provided this method? validates :email, presence: true, uniqueness: true",
     answer: :rails,
     explanation: "`validates` is an ActiveModel/ActiveRecord method from Rails that adds validation rules to models.",
     sent_at: 1.day.ago,
-    high_success: true
+    success_rate: 100
   }
 ]
 
-high_success_questions = archived_puzzles.select { |p| p[:high_success] }.map { |p| p[:question] }
+success_rate_by_question = archived_puzzles.to_h { |p| [ p[:question], p[:success_rate] ] }
 
 archived_puzzles.each do |p|
   Puzzle.find_or_create_by!(question: p[:question]) do |puzzle|
@@ -116,7 +118,7 @@ cloned_sources.each do |source|
   next if Puzzle.where(original_puzzle_id: parent.id).exists?
 
   Puzzle.create!(
-    question: parent.question,
+    question: "#{parent.question} (clone)",
     answer: parent.answer,
     explanation: parent.explanation,
     link: parent.link,
@@ -157,16 +159,19 @@ users.each_with_index do |user_data, user_idx|
 
   # Seed answers for archived puzzles so correct_answer_percentage has data.
   # Real users only answer puzzles after they've been sent (archived state).
-  # High-success puzzles get 9/10 correct; others get random low/mixed results.
+  # Each puzzle's success_rate is deterministic: user_idx < rate/10 means correct,
+  # so a rate of 20 yields exactly 2/10 correct, 80 yields 8/10, etc.
   Puzzle.archived.each do |puzzle|
-    is_high_success = high_success_questions.include?(puzzle.question)
+    base_question = puzzle.original_puzzle&.question || puzzle.question
+    rate = success_rate_by_question.fetch(base_question, 50)
+
     Answer.find_or_create_by!(
       user_id: user.id,
       puzzle_id: puzzle.id,
       server_id: server.id
     ) do |answer|
       answer.choice = [ "ruby", "rails" ].sample
-      answer.is_correct = is_high_success ? user_idx < 9 : [ true, false ].sample
+      answer.is_correct = user_idx < (rate / 10)
     end
   end
 end
