@@ -18,7 +18,7 @@ class Puzzle < ApplicationRecord
     (correct_count * 100.0 / total).round(1)
   end
 
-  def clone
+  def clone_puzzle
     attrs = attributes.slice("question", "answer", "explanation", "link", "suggested_by")
     Puzzle.create(attrs.merge(original_puzzle: self, state: "pending"))
   end

@@ -68,13 +68,13 @@ class PuzzleTest < ActiveSupport::TestCase
     assert_includes puzzles, puzzle1
     assert_includes puzzles, puzzle2
 
-    puzzle3 = puzzle1.clone
+    puzzle3 = puzzle1.clone_puzzle
     puzzles = Puzzle.without_cloned
     assert_not_includes puzzles, puzzle1
     assert_includes puzzles, puzzle2
     assert_includes puzzles, puzzle3
 
-    puzzle4 = puzzle3.clone
+    puzzle4 = puzzle3.clone_puzzle
     puzzles = Puzzle.without_cloned
     assert_not_includes puzzles, puzzle1
     assert_includes puzzles, puzzle2
