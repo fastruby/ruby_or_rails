@@ -1,6 +1,9 @@
 # db/seeds.rb
 
 # ====== Create Puzzle records ======
+# Archived entries carry `sent_at` and a fixed `success_rate` (% of 10 users
+# who answer correctly). Rates <= 80 appear in the "low success rate" filter;
+# rates > 80 do not. Entries without `state` default to :pending.
 puzzles = [
   {
     question: "Ruby or Rails provided this method? Array.new(5) { |i| i * 2 }",
@@ -26,24 +29,12 @@ puzzles = [
     question: "Ruby or Rails provided this method? params[:id]",
     answer: :rails,
     explanation: "`params[:id]` is used in Rails to fetch query parameters or URL parameters in controller actions."
-  }
-]
-
-puzzles.each do |p|
-  Puzzle.find_or_create_by!(question: p[:question]) do |puzzle|
-    puzzle.answer = p[:answer]
-    puzzle.explanation = p[:explanation]
-  end
-end
-
-# ====== Create Archived (already sent) Puzzle records ======
-# Each puzzle has a fixed success_rate (% of 10 users who answer correctly).
-# Rates <= 80 appear in the "low success rate" filter; rates > 80 do not.
-archived_puzzles = [
+  },
   {
     question: "Ruby or Rails provided this method? before_action :authenticate_user!",
     answer: :rails,
     explanation: "`before_action` is a Rails callback defined in `ActionController::Callbacks`. It runs specified methods before controller actions.",
+    state: :archived,
     sent_at: 7.days.ago,
     success_rate: 20
   },
@@ -51,6 +42,7 @@ archived_puzzles = [
     question: "Ruby or Rails provided this method? 42.times { puts 'hello' }",
     answer: :ruby,
     explanation: "`Integer#times` is a core Ruby method that iterates a block a specified number of times.",
+    state: :archived,
     sent_at: 6.days.ago,
     success_rate: 40
   },
@@ -58,6 +50,7 @@ archived_puzzles = [
     question: "Ruby or Rails provided this method? User.where(active: true).order(:name)",
     answer: :rails,
     explanation: "`where` and `order` are ActiveRecord query methods provided by Rails to build SQL queries.",
+    state: :archived,
     sent_at: 5.days.ago,
     success_rate: 50
   },
@@ -65,6 +58,7 @@ archived_puzzles = [
     question: "Ruby or Rails provided this method? 'hello world'.split(' ')",
     answer: :ruby,
     explanation: "`String#split` is a core Ruby method that divides a string into an array based on a delimiter.",
+    state: :archived,
     sent_at: 4.days.ago,
     success_rate: 70
   },
@@ -72,14 +66,15 @@ archived_puzzles = [
     question: "Ruby or Rails provided this method? flash[:notice] = 'Saved!'",
     answer: :rails,
     explanation: "`flash` is a Rails feature provided by `ActionDispatch::Flash` for passing messages between requests.",
+    state: :archived,
     sent_at: 3.days.ago,
     success_rate: 80
   },
-  # high success rate puzzles -- should NOT appear in the low success rate filter (rate > 80)
   {
     question: "Ruby or Rails provided this method? [1, 2, 3].reduce(:+)",
     answer: :ruby,
     explanation: "`Enumerable#reduce` (also `inject`) is a core Ruby method that combines elements using a binary operation.",
+    state: :archived,
     sent_at: 2.days.ago,
     success_rate: 90
   },
@@ -87,18 +82,21 @@ archived_puzzles = [
     question: "Ruby or Rails provided this method? validates :email, presence: true, uniqueness: true",
     answer: :rails,
     explanation: "`validates` is an ActiveModel/ActiveRecord method from Rails that adds validation rules to models.",
+    state: :archived,
     sent_at: 1.day.ago,
     success_rate: 100
   }
 ]
 
-success_rate_by_question = archived_puzzles.to_h { |p| [ p[:question], p[:success_rate] ] }
+success_rate_by_question = puzzles.each_with_object({}) do |p, h|
+  h[p[:question]] = p[:success_rate] if p[:success_rate]
+end
 
-archived_puzzles.each do |p|
+puzzles.each do |p|
   Puzzle.find_or_create_by!(question: p[:question]) do |puzzle|
     puzzle.answer = p[:answer]
     puzzle.explanation = p[:explanation]
-    puzzle.state = :archived
+    puzzle.state = p[:state] if p[:state]
     puzzle.sent_at = p[:sent_at]
   end
 end
