@@ -41,6 +41,8 @@ class DailyPuzzleJobTest < ActiveJob::TestCase
   end
 
   test "marks the selected puzzle as archived and sets sent_at" do
+    Puzzle.approved.where(sent_at: nil).delete_all
+
     puzzle = Puzzle.create!(
       question: "Approved unsent puzzle question",
       answer: "ruby",

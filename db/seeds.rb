@@ -1,6 +1,9 @@
 # db/seeds.rb
 
 # ====== Create Puzzle records ======
+# Archived entries carry `sent_at` and a fixed `success_rate` (% of 10 users
+# who answer correctly). Rates <= 80 appear in the "low success rate" filter;
+# rates > 80 do not. Entries without `state` default to :pending.
 puzzles = [
   {
     question: "Ruby or Rails provided this method? Array.new(5) { |i| i * 2 }",
@@ -26,14 +29,102 @@ puzzles = [
     question: "Ruby or Rails provided this method? params[:id]",
     answer: :rails,
     explanation: "`params[:id]` is used in Rails to fetch query parameters or URL parameters in controller actions."
+  },
+  {
+    question: "Ruby or Rails provided this method? before_action :authenticate_user!",
+    answer: :rails,
+    explanation: "`before_action` is a Rails callback defined in `ActionController::Callbacks`. It runs specified methods before controller actions.",
+    state: :archived,
+    sent_at: 7.days.ago,
+    success_rate: 20
+  },
+  {
+    question: "Ruby or Rails provided this method? 42.times { puts 'hello' }",
+    answer: :ruby,
+    explanation: "`Integer#times` is a core Ruby method that iterates a block a specified number of times.",
+    state: :archived,
+    sent_at: 6.days.ago,
+    success_rate: 40
+  },
+  {
+    question: "Ruby or Rails provided this method? User.where(active: true).order(:name)",
+    answer: :rails,
+    explanation: "`where` and `order` are ActiveRecord query methods provided by Rails to build SQL queries.",
+    state: :archived,
+    sent_at: 5.days.ago,
+    success_rate: 50
+  },
+  {
+    question: "Ruby or Rails provided this method? 'hello world'.split(' ')",
+    answer: :ruby,
+    explanation: "`String#split` is a core Ruby method that divides a string into an array based on a delimiter.",
+    state: :archived,
+    sent_at: 4.days.ago,
+    success_rate: 70
+  },
+  {
+    question: "Ruby or Rails provided this method? flash[:notice] = 'Saved!'",
+    answer: :rails,
+    explanation: "`flash` is a Rails feature provided by `ActionDispatch::Flash` for passing messages between requests.",
+    state: :archived,
+    sent_at: 3.days.ago,
+    success_rate: 80
+  },
+  {
+    question: "Ruby or Rails provided this method? [1, 2, 3].reduce(:+)",
+    answer: :ruby,
+    explanation: "`Enumerable#reduce` (also `inject`) is a core Ruby method that combines elements using a binary operation.",
+    state: :archived,
+    sent_at: 2.days.ago,
+    success_rate: 90
+  },
+  {
+    question: "Ruby or Rails provided this method? validates :email, presence: true, uniqueness: true",
+    answer: :rails,
+    explanation: "`validates` is an ActiveModel/ActiveRecord method from Rails that adds validation rules to models.",
+    state: :archived,
+    sent_at: 1.day.ago,
+    success_rate: 100
   }
 ]
+
+success_rate_by_question = puzzles.each_with_object({}) do |p, h|
+  h[p[:question]] = p[:success_rate] if p[:success_rate]
+end
 
 puzzles.each do |p|
   Puzzle.find_or_create_by!(question: p[:question]) do |puzzle|
     puzzle.answer = p[:answer]
     puzzle.explanation = p[:explanation]
+    puzzle.state = p[:state] if p[:state]
+    puzzle.sent_at = p[:sent_at]
   end
+end
+
+# ====== Clone a few archived puzzles so the "hide cloned" filter has data ======
+# Mix of pending and archived clones to exercise both states.
+cloned_sources = [
+  { question: "Ruby or Rails provided this method? before_action :authenticate_user!", state: :pending },
+  { question: "Ruby or Rails provided this method? User.where(active: true).order(:name)", state: :pending },
+  { question: "Ruby or Rails provided this method? 42.times { puts 'hello' }", state: :archived, sent_at: 12.hours.ago },
+  { question: "Ruby or Rails provided this method? flash[:notice] = 'Saved!'", state: :archived, sent_at: 6.hours.ago }
+]
+
+cloned_sources.each do |source|
+  parent = Puzzle.find_by(question: source[:question])
+  next unless parent
+  next if Puzzle.where(original_puzzle_id: parent.id).exists?
+
+  Puzzle.create!(
+    question: "#{parent.question} (clone)",
+    answer: parent.answer,
+    explanation: parent.explanation,
+    link: parent.link,
+    suggested_by: parent.suggested_by,
+    state: source[:state],
+    sent_at: source[:sent_at],
+    original_puzzle: parent
+  )
 end
 
 # ====== Create the Server ======
@@ -63,19 +154,26 @@ users.each do |user_data|
 
   # Associate user with the server if not already linked
   user.servers << server unless user.servers.include?(server)
+end
 
-  # Seed random answers for this user if they have none
-  if user.answers.where(server_id: server.id).empty?
-    3.times do
-      puzzle = Puzzle.all.sample
-      Answer.find_or_create_by!(
-        user_id: user.id,
-        puzzle_id: puzzle.id,
-        server_id: server.id
-      ) do |answer|
-        answer.choice = [ "ruby", "rails" ].sample
-        answer.is_correct = [ true, false ].sample
-      end
+# ====== Seed answers for archived puzzles ======
+# Real users only answer puzzles after they've been sent (archived state).
+# For each archived puzzle, mark the first `success_rate / 10` users correct
+# and the rest incorrect, so each puzzle hits its target rate exactly.
+server_users = server.users.order(:id)
+
+Puzzle.archived.each do |puzzle|
+  base_question = puzzle.original_puzzle&.question || puzzle.question
+  correct_count = success_rate_by_question.fetch(base_question, 50) / 10
+
+  server_users.each_with_index do |user, idx|
+    Answer.find_or_create_by!(
+      user_id: user.id,
+      puzzle_id: puzzle.id,
+      server_id: server.id
+    ) do |answer|
+      answer.choice = [ "ruby", "rails" ].sample
+      answer.is_correct = idx < correct_count
     end
   end
 end
