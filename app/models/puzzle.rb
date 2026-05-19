@@ -18,7 +18,18 @@ class Puzzle < ApplicationRecord
     (correct_count * 100.0 / total).round(1)
   end
 
+  def clone_puzzle
+    attrs = attributes.slice("question", "answer", "explanation", "link", "suggested_by")
+    Puzzle.create(attrs.merge(original_puzzle: self, state: "pending"))
+  end
+
   def self.only_low_success_rate
-    includes(:answers).to_a.select { |ans| ans.correct_answer_percentage <= 80 }
+    low_success_rate_ids = includes(:answers).to_a.select { |ans| ans.correct_answer_percentage <= 80 }.map(&:id)
+    where(id: low_success_rate_ids)
+  end
+
+  def self.without_cloned
+    cloned_puzzles_ids = unscoped.where.not(original_puzzle_id: nil).pluck(:original_puzzle_id)
+    where.not(id: cloned_puzzles_ids)
   end
 end

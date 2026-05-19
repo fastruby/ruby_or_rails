@@ -19,6 +19,8 @@
 <section class="filters">
   <label>Filters:</label>
   <br>
-  <%= link_to "Show low success rate only", url_for(low_success_rate: true) %>
+  <%= link_to "Show low success rate only", url_for(low_success_rate: true, hide_cloned_puzzles: params[:hide_cloned_puzzles]) %>
+  <br>
+  <%= link_to "Hide cloned puzzles", url_for(hide_cloned_puzzles: true, low_success_rate: params[:low_success_rate]) %>
 </section>
 <%= render partial: 'puzzles_table', locals: { puzzles: @archived_puzzles, actions: :archived } %>

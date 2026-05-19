@@ -59,4 +59,26 @@ class PuzzleTest < ActiveSupport::TestCase
     assert_includes puzzles, puzzles(:archived_low_rate)
     assert_not_includes puzzles, puzzles(:archived_high_rate)
   end
+
+  test "without_cloned returns puzzles that has not been cloned" do
+    puzzle1 = puzzles(:one)
+    puzzle2 = puzzles(:two)
+
+    puzzles = Puzzle.without_cloned
+    assert_includes puzzles, puzzle1
+    assert_includes puzzles, puzzle2
+
+    puzzle3 = puzzle1.clone_puzzle
+    puzzles = Puzzle.without_cloned
+    assert_not_includes puzzles, puzzle1
+    assert_includes puzzles, puzzle2
+    assert_includes puzzles, puzzle3
+
+    puzzle4 = puzzle3.clone_puzzle
+    puzzles = Puzzle.without_cloned
+    assert_not_includes puzzles, puzzle1
+    assert_includes puzzles, puzzle2
+    assert_not_includes puzzles, puzzle3
+    assert_includes puzzles, puzzle4
+  end
 end
