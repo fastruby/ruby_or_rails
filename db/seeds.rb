@@ -101,14 +101,17 @@ archived_puzzles.each do |p|
   end
 end
 
-# ====== Clone a couple archived puzzles so the "hide cloned" filter has data ======
-cloned_source_questions = [
-  "Ruby or Rails provided this method? before_action :authenticate_user!",
-  "Ruby or Rails provided this method? User.where(active: true).order(:name)"
+# ====== Clone a few archived puzzles so the "hide cloned" filter has data ======
+# Mix of pending and archived clones to exercise both states.
+cloned_sources = [
+  { question: "Ruby or Rails provided this method? before_action :authenticate_user!", state: :pending },
+  { question: "Ruby or Rails provided this method? User.where(active: true).order(:name)", state: :pending },
+  { question: "Ruby or Rails provided this method? 42.times { puts 'hello' }", state: :archived, sent_at: 12.hours.ago },
+  { question: "Ruby or Rails provided this method? flash[:notice] = 'Saved!'", state: :archived, sent_at: 6.hours.ago }
 ]
 
-cloned_source_questions.each do |question|
-  parent = Puzzle.find_by(question: question)
+cloned_sources.each do |source|
+  parent = Puzzle.find_by(question: source[:question])
   next unless parent
   next if Puzzle.where(original_puzzle_id: parent.id).exists?
 
@@ -118,7 +121,8 @@ cloned_source_questions.each do |question|
     explanation: parent.explanation,
     link: parent.link,
     suggested_by: parent.suggested_by,
-    state: :pending,
+    state: source[:state],
+    sent_at: source[:sent_at],
     original_puzzle: parent
   )
 end
