@@ -101,6 +101,28 @@ archived_puzzles.each do |p|
   end
 end
 
+# ====== Clone a couple archived puzzles so the "hide cloned" filter has data ======
+cloned_source_questions = [
+  "Ruby or Rails provided this method? before_action :authenticate_user!",
+  "Ruby or Rails provided this method? User.where(active: true).order(:name)"
+]
+
+cloned_source_questions.each do |question|
+  parent = Puzzle.find_by(question: question)
+  next unless parent
+  next if Puzzle.where(original_puzzle_id: parent.id).exists?
+
+  Puzzle.create!(
+    question: parent.question,
+    answer: parent.answer,
+    explanation: parent.explanation,
+    link: parent.link,
+    suggested_by: parent.suggested_by,
+    state: :pending,
+    original_puzzle: parent
+  )
+end
+
 # ====== Create the Server ======
 server = Server.find_or_create_by!(server_id: 1179555097060061245) do |s|
   s.name = "OmbuTest"
@@ -129,24 +151,8 @@ users.each_with_index do |user_data, user_idx|
   # Associate user with the server if not already linked
   user.servers << server unless user.servers.include?(server)
 
-  # Seed random answers for approved puzzles if user has none
-  if user.answers.where(server_id: server.id).empty?
-    3.times do
-      puzzle = Puzzle.approved.sample
-      next unless puzzle
-
-      Answer.find_or_create_by!(
-        user_id: user.id,
-        puzzle_id: puzzle.id,
-        server_id: server.id
-      ) do |answer|
-        answer.choice = [ "ruby", "rails" ].sample
-        answer.is_correct = [ true, false ].sample
-      end
-    end
-  end
-
   # Seed answers for archived puzzles so correct_answer_percentage has data.
+  # Real users only answer puzzles after they've been sent (archived state).
   # High-success puzzles get 9/10 correct; others get random low/mixed results.
   Puzzle.archived.each do |puzzle|
     is_high_success = high_success_questions.include?(puzzle.question)
