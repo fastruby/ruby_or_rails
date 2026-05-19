@@ -5,6 +5,7 @@ class PuzzlesController < ApplicationController
     @rejected_puzzles = Puzzle.rejected
     @archived_puzzles = Puzzle.archived
     @archived_puzzles = @archived_puzzles.only_low_success_rate if params[:low_success_rate]
+    @archived_puzzles = @archived_puzzles.without_cloned if params[:hide_cloned_puzzles]
   end
 
   def edit
