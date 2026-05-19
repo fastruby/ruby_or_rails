@@ -148,7 +148,7 @@ users = [
   { user_id: 110, username: "user10", role: "member" }
 ]
 
-users.each_with_index do |user_data, user_idx|
+users.each do |user_data|
   user = User.find_or_create_by!(user_id: user_data[:user_id]) do |u|
     u.username = user_data[:username]
     u.role = user_data[:role]
@@ -156,22 +156,26 @@ users.each_with_index do |user_data, user_idx|
 
   # Associate user with the server if not already linked
   user.servers << server unless user.servers.include?(server)
+end
 
-  # Seed answers for archived puzzles so correct_answer_percentage has data.
-  # Real users only answer puzzles after they've been sent (archived state).
-  # Each puzzle's success_rate is deterministic: user_idx < rate/10 means correct,
-  # so a rate of 20 yields exactly 2/10 correct, 80 yields 8/10, etc.
-  Puzzle.archived.each do |puzzle|
-    base_question = puzzle.original_puzzle&.question || puzzle.question
-    rate = success_rate_by_question.fetch(base_question, 50)
+# ====== Seed answers for archived puzzles ======
+# Real users only answer puzzles after they've been sent (archived state).
+# For each archived puzzle, mark the first `success_rate / 10` users correct
+# and the rest incorrect, so each puzzle hits its target rate exactly.
+server_users = server.users.order(:id)
 
+Puzzle.archived.each do |puzzle|
+  base_question = puzzle.original_puzzle&.question || puzzle.question
+  correct_count = success_rate_by_question.fetch(base_question, 50) / 10
+
+  server_users.each_with_index do |user, idx|
     Answer.find_or_create_by!(
       user_id: user.id,
       puzzle_id: puzzle.id,
       server_id: server.id
     ) do |answer|
       answer.choice = [ "ruby", "rails" ].sample
-      answer.is_correct = user_idx < (rate / 10)
+      answer.is_correct = idx < correct_count
     end
   end
 end
