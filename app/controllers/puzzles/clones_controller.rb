@@ -4,9 +4,9 @@ class Puzzles::ClonesController < ApplicationController
     cloned_puzzle = original_puzzle.clone_puzzle
 
     if cloned_puzzle.persisted?
-      redirect_to puzzles_path, notice: "Puzzle cloned. You can now edit the new puzzle."
+      redirect_back fallback_location: puzzles_path, notice: "Puzzle cloned. You can now edit the new puzzle."
     else
-      redirect_to puzzles_path, alert: "Failed to clone puzzle."
+      redirect_back fallback_location: puzzles_path, alert: "Failed to clone puzzle."
     end
   end
 end

@@ -22,6 +22,16 @@ class Puzzles::ClonesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "pending", cloned.state
   end
 
+  test "redirects back to referer to preserve filters" do
+    original = puzzles(:one)
+    referer = puzzles_path(hide_cloned_puzzles: true, low_success_rate: true)
+
+    sign_in
+    post puzzle_clone_path(original), headers: { "HTTP_REFERER" => referer }
+
+    assert_redirected_to referer
+  end
+
   test "does not allow unauthenticated users to create a clone" do
     original = puzzles(:one)
 
