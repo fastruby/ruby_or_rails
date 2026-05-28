@@ -15,9 +15,9 @@
   <tbody>
     <% puzzles.each do |puzzle| %>
       <tr id="<%= dom_id(puzzle) %>">
-        <td><%= simple_format(puzzle.question) %></td>
+        <td><%= markdown(puzzle.question) %></td>
         <td><%= puzzle.answer %></td>
-        <td><%= puzzle.explanation %></td>
+        <td><%= markdown(puzzle.explanation) %></td>
         <td>
           <% if puzzle.link.present? %>
             <%= link_to 'View', puzzle.link, target: '_blank' %>
