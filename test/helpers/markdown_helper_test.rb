@@ -1,6 +1,6 @@
 require "test_helper"
 
-class MarkdownHelperTest < ActiveJob::TestCase
+class MarkdownHelperTest < ActionView::TestCase
   include ApplicationHelper
 
   test "renders `code` with code tag" do
