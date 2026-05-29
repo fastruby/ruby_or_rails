@@ -1,5 +1,5 @@
 one:
-  question: "Ruby or Rails provided this method? render json: @user"
+  question: "Ruby or Rails provided this method? `render json: @user`"
   answer: "rails"
   explanation: "This is a test puzzle"
   link: "https://example.com"
@@ -7,7 +7,7 @@ one:
   suggested_by: "test_user"
 
 two:
-  question: "Ruby or Rails provided this method? puts 'Hello, World!'"
+  question: "Ruby or Rails provided this method? `puts 'Hello, World!'`"
   answer: "ruby"
   explanation: "This is a test puzzle 2"
   link: ""

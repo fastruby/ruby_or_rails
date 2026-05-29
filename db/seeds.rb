@@ -6,32 +6,32 @@
 # rates > 80 do not. Entries without `state` default to :pending.
 puzzles = [
   {
-    question: "Ruby or Rails provided this method? Array.new(5) { |i| i * 2 }",
+    question: "Ruby or Rails provided this method? `Array.new(5) { |i| i * 2 }`",
     answer: :ruby,
     explanation: "`Array.new` is a core Ruby method that creates a new array with a specified size and optional block for initialization. This is part of Ruby’s core library."
   },
   {
-    question: "Ruby or Rails provided this method? File.open('log.txt', 'w') { |file| file.write('Hello, World!') }",
+    question: "Ruby or Rails provided this method? `File.open('log.txt', 'w') { |file| file.write('Hello, World!') }`",
     answer: :ruby,
     explanation: "`File.open` is a core Ruby method for opening files. It’s part of Ruby's standard library for file handling, not part of Rails."
   },
   {
-    question: "Ruby or Rails provided this method? render json: @user",
+    question: "Ruby or Rails provided this method? `render json: @user`",
     answer: :rails,
     explanation: "`render json:` is a Rails method used to render a JSON response from a controller action."
   },
   {
-    question: "Ruby or Rails provided this method? link_to 'Home', root_path",
+    question: "Ruby or Rails provided this method? `link_to 'Home', root_path`",
     answer: :rails,
     explanation: "`link_to` is a Rails helper method that generates HTML links. `root_path` is a Rails path helper."
   },
   {
-    question: "Ruby or Rails provided this method? params[:id]",
+    question: "Ruby or Rails provided this method? `params[:id]`",
     answer: :rails,
     explanation: "`params[:id]` is used in Rails to fetch query parameters or URL parameters in controller actions."
   },
   {
-    question: "Ruby or Rails provided this method? before_action :authenticate_user!",
+    question: "Ruby or Rails provided this method? `before_action :authenticate_user!`",
     answer: :rails,
     explanation: "`before_action` is a Rails callback defined in `ActionController::Callbacks`. It runs specified methods before controller actions.",
     state: :archived,
@@ -39,7 +39,7 @@ puzzles = [
     success_rate: 20
   },
   {
-    question: "Ruby or Rails provided this method? 42.times { puts 'hello' }",
+    question: "Ruby or Rails provided this method? `42.times { puts 'hello' }`",
     answer: :ruby,
     explanation: "`Integer#times` is a core Ruby method that iterates a block a specified number of times.",
     state: :archived,
@@ -47,7 +47,7 @@ puzzles = [
     success_rate: 40
   },
   {
-    question: "Ruby or Rails provided this method? User.where(active: true).order(:name)",
+    question: "Ruby or Rails provided this method? `User.where(active: true).order(:name)`",
     answer: :rails,
     explanation: "`where` and `order` are ActiveRecord query methods provided by Rails to build SQL queries.",
     state: :archived,
@@ -55,7 +55,7 @@ puzzles = [
     success_rate: 50
   },
   {
-    question: "Ruby or Rails provided this method? 'hello world'.split(' ')",
+    question: "Ruby or Rails provided this method? `'hello world'.split(' ')`",
     answer: :ruby,
     explanation: "`String#split` is a core Ruby method that divides a string into an array based on a delimiter.",
     state: :archived,
@@ -63,7 +63,7 @@ puzzles = [
     success_rate: 70
   },
   {
-    question: "Ruby or Rails provided this method? flash[:notice] = 'Saved!'",
+    question: "Ruby or Rails provided this method? `flash[:notice] = 'Saved!'`",
     answer: :rails,
     explanation: "`flash` is a Rails feature provided by `ActionDispatch::Flash` for passing messages between requests.",
     state: :archived,
@@ -71,7 +71,7 @@ puzzles = [
     success_rate: 80
   },
   {
-    question: "Ruby or Rails provided this method? [1, 2, 3].reduce(:+)",
+    question: "Ruby or Rails provided this method? `[1, 2, 3].reduce(:+)`",
     answer: :ruby,
     explanation: "`Enumerable#reduce` (also `inject`) is a core Ruby method that combines elements using a binary operation.",
     state: :archived,
@@ -79,12 +79,17 @@ puzzles = [
     success_rate: 90
   },
   {
-    question: "Ruby or Rails provided this method? validates :email, presence: true, uniqueness: true",
+    question: "Ruby or Rails provided this method? `validates :email, presence: true, uniqueness: true`",
     answer: :rails,
     explanation: "`validates` is an ActiveModel/ActiveRecord method from Rails that adds validation rules to models.",
     state: :archived,
     sent_at: 1.day.ago,
     success_rate: 100
+  },
+  {
+    question: "Ruby or Rails provided this method?\n\n```\nclass SomeClass\n  def method\n    whatever\n  end\nend\n```",
+    answer: :rails,
+    explanation: "Not really important, just to show it renders blocks"
   }
 ]
 
