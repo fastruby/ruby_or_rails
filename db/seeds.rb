@@ -90,6 +90,16 @@ puzzles = [
     question: "Ruby or Rails provided this method?\n\n```\nclass SomeClass\n  def method\n    whatever\n  end\nend\n```",
     answer: :rails,
     explanation: "Not really important, just to show it renders blocks"
+  },
+  {
+    question: "In this snippet:\n```\nprices = { apple: 1, banana: 2, cherry: 3 }\ndiscounted = prices.transform_values { |price| price * 0.9 }\n\ndiscounted\n=> {:apple=>0.9, :banana=>1.8, :cherry=>2.7}\n```\nIs the `transform_values` method a Ruby or Rails method?",
+    answer: :ruby,
+    explanation: "`Hash#transform_values` has been part of core Ruby since 2.4.0. It originated as an ActiveSupport addition, then was promoted into Ruby core."
+  },
+  {
+    question: "In this snippet:\n```\nusername = \"   \"\nusername.blank?\n\n=> true\n```\nIs the `blank?` method a Ruby or Rails method?",
+    answer: :rails,
+    explanation: "`blank?` is an ActiveSupport (Rails) method added to every object. Plain Ruby has no `blank?`; ActiveSupport makes a whitespace-only String return true."
   }
 ]
 
