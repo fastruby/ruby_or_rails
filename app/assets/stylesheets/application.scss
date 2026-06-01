@@ -129,6 +129,15 @@ td pre {
   margin-bottom: 1rem;
 }
 
+.rejected_table {
+  summary {
+    display: list-item;
+    text-align: start;
+    padding-inline-start: 1rem;
+  }
+  padding-block: 2rem;
+}
+
 /* Banner styles - using styleguide colors where possible */
 .banner {
   position: fixed;

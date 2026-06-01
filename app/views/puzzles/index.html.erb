@@ -11,9 +11,6 @@
 </h1>
 <%= render partial: 'puzzles_table', locals: { puzzles: @approved_puzzles, actions: :approved } %>
 
-<h1>Rejected Puzzles</h1>
-<%= render partial: 'puzzles_table', locals: { puzzles: @rejected_puzzles, actions: :rejected } %>
-
 <h1>Archive Puzzles - Total: <%= @archived_puzzles.length %></h1>
 <p>These puzzles have already been sent to the users.</p>
 <section class="filters">
@@ -24,3 +21,9 @@
   <%= link_to "Hide cloned puzzles", url_for(hide_cloned_puzzles: true, low_success_rate: params[:low_success_rate]) %>
 </section>
 <%= render partial: 'puzzles_table', locals: { puzzles: @archived_puzzles, actions: :archived } %>
+
+<details class="rejected_table">
+  <summary>Click to expand/collapse "Rejected Puzzles" table</summary>
+  <h1>Rejected Puzzles</h1>
+  <%= render partial: 'puzzles_table', locals: { puzzles: @rejected_puzzles, actions: :rejected } %>
+</details>
