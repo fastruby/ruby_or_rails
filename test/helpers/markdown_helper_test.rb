@@ -36,6 +36,6 @@ class MarkdownHelperTest < ActionView::TestCase
     CONTENT
     as_html = markdown(puzzle_content)
 
-    assert_includes as_html, "<pre><code>class ACodeBlock"
+    assert_includes as_html, "with</p>\n\n<pre><code>class ACodeBlock"
   end
 end

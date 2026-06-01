@@ -7,7 +7,7 @@ module ApplicationHelper
     # fixing this at render because it's not really required by Discord
     # it's just a quirk of Redcarpet
     if text.match?(/[^\n]\n```(.*)\n```/m)
-      text = text.gsub(/[^\n]\n```(.*)\n```/m, "\n\n```\\1\n```")
+      text = text.gsub(/([^\n])\n```(.*?)\n```/m, "\\1\n\n```\\2\n```")
     end
 
     markdown.render(text.to_s).html_safe
