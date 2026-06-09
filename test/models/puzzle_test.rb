@@ -81,4 +81,17 @@ class PuzzleTest < ActiveSupport::TestCase
     assert_not_includes puzzles, puzzle3
     assert_includes puzzles, puzzle4
   end
+
+  test "once archived, it cannot be unarchived" do
+    puzzle = puzzles(:archived_low_rate)
+    assert puzzle.valid?
+
+    refute puzzle.update(state: :pending)
+    refute puzzle.update(state: :approved)
+    refute puzzle.update(state: :rejected)
+
+    assert_raises(ActiveRecord::RecordInvalid, match: /State cannot be unarchived/) { puzzle.pending! }
+    assert_raises(ActiveRecord::RecordInvalid, match: /State cannot be unarchived/) { puzzle.approved! }
+    assert_raises(ActiveRecord::RecordInvalid, match: /State cannot be unarchived/) { puzzle.rejected! }
+  end
 end

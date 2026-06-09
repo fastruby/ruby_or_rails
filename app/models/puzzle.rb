@@ -9,6 +9,8 @@ class Puzzle < ApplicationRecord
 
   scope :archived, -> { where(state: :archived).order(sent_at: :desc) }
 
+  validate :cannot_be_unarchived
+
   def correct_answer_percentage
     total = answers.size
     return 0 if total.zero?
@@ -31,5 +33,11 @@ class Puzzle < ApplicationRecord
   def self.without_cloned
     cloned_puzzles_ids = unscoped.where.not(original_puzzle_id: nil).pluck(:original_puzzle_id)
     where.not(id: cloned_puzzles_ids)
+  end
+
+  private
+
+  def cannot_be_unarchived
+    errors.add(:state, "cannot be unarchived") if state != state_was && state_was == "archived"
   end
 end
