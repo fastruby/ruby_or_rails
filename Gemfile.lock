@@ -460,8 +460,8 @@ GEM
       tilt (>= 1.4.0, < 3)
     slack-ruby-block-kit (0.26.0)
       zeitwerk (~> 2.6)
-    slack-ruby-client (2.6.0)
-      faraday (>= 2.0)
+    slack-ruby-client (3.1.0)
+      faraday (>= 2.0.1)
       faraday-mashify
       faraday-multipart
       gli
