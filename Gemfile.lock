@@ -558,6 +558,7 @@ DEPENDENCIES
   fastruby-styleguide!
   importmap-rails
   jbuilder
+  minitest (< 6)
   omniauth
   omniauth-google-oauth2
   pg (~> 1.6.3)
