@@ -56,11 +56,6 @@ gem "fastruby-styleguide", github: "fastruby/styleguide", branch: "gh-pages"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 
-group :development, :production do
-  gem "sidekiq"
-  gem "sidekiq-scheduler"
-end
-
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
