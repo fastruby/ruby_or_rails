@@ -10,6 +10,11 @@ updates:
       # Bundle all minor + patch gem updates into a single weekly PR.
       # Major bumps still open as individual PRs for deliberate review.
       ruby-minor-and-patch:
+        # Keep the Rails framework out of the routine batch: a Rails minor
+        # (e.g. 8.0 -> 8.1) is a deliberate upgrade, not routine churn, and
+        # should arrive as its own PR.
+        exclude-patterns:
+          - "rails"
         update-types:
           - minor
           - patch
